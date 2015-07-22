@@ -1,5 +1,5 @@
-cvx: A Generic Connected Component Labelling Library
-====================================================
+cvx
+===
 
 **This project is currently under development**
 
@@ -15,6 +15,28 @@ At the moment, ``cvx`` can currently extract the following component features:
 * Points
 * Bounding box
 * Extent
+
+``cvx`` will support the following features in the future:
+
 * Convex hull
 * Outer contours
 * Inner contours
+
+### Building ``cvx``
+
+Run the following:
+
+```
+mkdir cxv
+cd cvx
+git clone https://github.com/MisanthropicBit/cvx.git
+mkdir build
+cd build
+cmake <options> ..
+```
+
+``cvx`` can be built as a static or shared library using options ``cmake -DCVX_STATIC_LIBRARY=On`` and ``cmake -DCVX_SHARED_LIBRARY=On``. Examples, tests and Doxygen documentation will be built by passing ``CVX_BUILD_EXAMPLES``, ``CVX_BUILD_TESTS`` and ``CVX_GEN_DOCS``, respectively.
+
+### Drawing
+
+``cvx`` relies on OpenCV for its drawing, which is not included by default. To build with OpenCV, pass ``CVX_WITH_OPENCV`` to ``cmake``.
