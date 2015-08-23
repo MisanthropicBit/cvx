@@ -43,13 +43,6 @@ int main() {
                                                    0,
                                                    cvx::feature_flag::bounding_box);
 
-        std::cout << ccs << ", " << components.size() << std::endl;
-
-        std::cout << components[0].bounding_box() << std::endl;
-        std::cout << components[1].bounding_box() << std::endl;
-        std::cout << components[2].bounding_box() << std::endl;
-        std::cout << components[3].bounding_box() << std::endl;
-
         assert(ccs == 4);
         assert(components.size() == 4);
 

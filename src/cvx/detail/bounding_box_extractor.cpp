@@ -21,8 +21,8 @@ namespace cvx {
         void bounding_box_extractor::finalise(connected_component& cc) {
             //cc.bounding_box().width  = cc.bounding_box().width - cc.bounding_box().x;
             //cc.bounding_box().height = cc.bounding_box().height - cc.bounding_box().y;
-            cc._bounding_box.width = cc._bounding_box.width - cc._bounding_box.x;
-            cc._bounding_box.height = cc._bounding_box.height - cc._bounding_box.y;
+            cc._bounding_box.width = cc._bounding_box.width - cc._bounding_box.x + 1;
+            cc._bounding_box.height = cc._bounding_box.height - cc._bounding_box.y + 1;
         }
     }
 }

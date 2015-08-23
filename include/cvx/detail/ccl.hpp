@@ -12,8 +12,6 @@
 #include <iterator>
 #include <type_traits>
 
-#include <iostream>
-
 namespace cvx {
     template<typename Iterator>
     using iterator_value_type = typename std::iterator_traits<Iterator>::value_type;
@@ -356,8 +354,6 @@ namespace cvx {
             std::vector<std::shared_ptr<extractor>> extractors;
             make_extractors_from_flags(flags,
                                        std::back_inserter(extractors));
-
-            std::cout << "BEG: " << extractors.size() << std::endl;
 
             for (auto& ex : extractors) {
                 ex->initialise();

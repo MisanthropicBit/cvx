@@ -81,6 +81,13 @@ namespace cvx {
                 return y + height;
             }
 
+            bool operator==(const rectangle2<T>& rhs) {
+                return x == rhs.x &&
+                       y == rhs.y &&
+                       width == rhs.width &&
+                       height == rhs.height;
+            }
+
         public:
             T x, y, width, height;
     };
