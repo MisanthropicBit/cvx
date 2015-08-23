@@ -1,2 +1,3 @@
-/lib
+build/
+lib/
 *.DS_STORE
