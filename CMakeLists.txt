@@ -41,6 +41,8 @@ option(CVX_BUILD_TESTS    "Build all tests"               ON)
 # Modify path to locate cmake Find* modules and custom functions
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+include(${PROJECT_SOURCE_DIR}/cmake/Functions.cmake)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Enable appropriate compiler flags
