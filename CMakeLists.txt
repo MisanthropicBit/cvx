@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-enable_testing()
-
 # Disregard setting PROJECT_VERSION etc. through the 'project' command
 if(POLICY CMP0048)
     cmake_policy(SET CMP0048 OLD)
@@ -40,7 +38,7 @@ option(CVX_GEN_DOCS       "Generate offline documention"  OFF)
 option(CVX_BUILD_EXAMPLES "Build all examples"            ON)
 option(CVX_BUILD_TESTS    "Build all tests"               ON)
 
-# Modify path to locate FindSDL2.cmake and FindSDL2_image.cmake
+# Modify path to locate cmake Find* modules and custom functions
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -53,7 +51,6 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 add_definitions(${CMAKE_CXX_FLAGS})
-
 
 #--------------------------------------------------------------------
 # Generate docs
@@ -98,6 +95,7 @@ endif()
 # Build tests
 #--------------------------------------------------------------------
 if(CVX_BUILD_TESTS)
+    enable_testing()
     add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
 endif()
 
