@@ -1,6 +1,8 @@
 cvx
 ===
 
+[![Build Status](https://travis-ci.org/MisanthropicBit/cvx.svg?branch=master)](https://travis-ci.org/MisanthropicBit/cvx)
+
 **This project is currently under development**
 
 ``cvx`` is a C++ library that aims to provide a generic, STL-like, and image-agnostic interface to fast **c**onnected **c**omponent **l**abelling (CCL) and feature extraction.

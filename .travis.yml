@@ -1,4 +1,12 @@
-language: c++
+language: cpp
+
+compiler:
+    - clang
+    - gcc
+
+os:
+    - linux
+    - osx
 
 install:
     - mkdir build
@@ -7,6 +15,10 @@ install:
     - make
 
 script: make test
+
+notifications:
+    on_success: change
+    on_failure: always
 
 branches:
     only:
