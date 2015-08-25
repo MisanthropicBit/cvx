@@ -32,7 +32,7 @@ void print_2darray(T array[][26], std::size_t width, std::size_t height) {
 int main() {
     // A sample 9x25 array with a pitch of 26 * sizeof(int) (presumably 104 bytes for a 4 byte integer)
     int pitched_array[][26] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9},
-                                {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 9} ,
+                                {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 9},
                                 {0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 9},
                                 {0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 9},
                                 {0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 9},
@@ -45,6 +45,7 @@ int main() {
     std::size_t width  = std::extent<T, 1>::value - 1;
     std::size_t height = std::extent<T, 0>::value;
     std::size_t pitch  = std::extent<T, 1>::value * sizeof(int);
+    std::cout << width << ", " << height << ", " << pitch << std::endl;
     auto first = &pitched_array[0][0];
     auto last  = &pitched_array[height - 1][width + 1];
 
