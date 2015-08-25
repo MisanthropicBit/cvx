@@ -4,3 +4,4 @@ lib/
 *.DS_STORE
 EnableCXX11.cmake
 FindOpenCV2.cmake
+*window*
