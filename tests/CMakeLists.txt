@@ -1,3 +1,5 @@
 cvx_build_test(test_ccl4 FALSE)
+cvx_build_test(test_ccl8 FALSE)
 cvx_build_test(test_area_extraction FALSE)
 cvx_build_test(test_bounding_box_extraction FALSE)
+cvx_build_test(test_point_extraction FALSE)
