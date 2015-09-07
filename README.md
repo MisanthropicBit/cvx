@@ -7,20 +7,20 @@ cvx
 
 ``cvx`` is a C++ library that aims to provide a generic, STL-like, and image-agnostic interface to fast **c**onnected **c**omponent **l**abelling (CCL) and feature extraction.
 
-Due to its STL-like interface using iterators, ``cvx`` works with any image data that can be described by iterators (see the ``examples/`` folder).
+Due to its STL-like interface, ``cvx`` works with any image data that can be described by random access iterators (see the ``examples/`` folder).
 
 ### Feature Extraction
-At the moment, ``cvx`` can currently extract the following component features:
+At the moment, ``cvx`` supports 4- and 8-connectedness and can currently extract the following component features:
 
-* Area
-* Centroid
+* Areas
+* Centroids
 * Points
-* Bounding box
-* Extent
+* Bounding boxes
+* Extents
 
 ``cvx`` will support the following features in the future:
 
-* Convex hull
+* Convex hulls
 * Outer contours
 * Inner contours
 
@@ -37,8 +37,11 @@ cd build
 cmake <options> ..
 ```
 
-``cvx`` can be built as a static or shared library using options ``cmake -DCVX_STATIC_LIBRARY=On`` and ``cmake -DCVX_SHARED_LIBRARY=On``. Examples, tests and Doxygen documentation will be built by passing ``CVX_BUILD_EXAMPLES``, ``CVX_BUILD_TESTS`` and ``CVX_GEN_DOCS``, respectively.
+``cvx`` can be built as a static or shared library. Below is a list of all the available options:
 
-### Drawing
-
-``cvx`` relies on OpenCV for its drawing, which is not included by default. To build with OpenCV, pass ``CVX_WITH_OPENCV`` to ``cmake``.
+* **``CVX_STATIC_LIBRARY``**: Build ``cvx`` as a static library
+* **``CVX_SHARED_LIBRARY``**: Build ``cvx`` as a shared library (default)
+* **``CVX_BUILD_EXAMPLES``**: Build all examples
+* **``CVX_BUILD_TESTS``**   : Build all tests
+* **``CVX_GEN_DOCS``**      : Build all documentation locally
+* **``CVX_WITH_OPENCV``**   : Also build examples that require OpenCV, and add display support to ``cvx``
