@@ -1,3 +1,5 @@
+# http://stackoverflow.com/questions/22111549/travis-ci-with-clang-3-4-and-c11
+
 language: cpp
 
 compiler:
@@ -8,8 +10,10 @@ os:
     - linux
     - osx
 
+# Required for building faster in Docker apparently
 sudo: false
 
+# Install versions of gcc and clang that support C++11
 addons:
     apt:
         sources:
@@ -17,8 +21,13 @@ addons:
         packages:
             - g++-4.8
             - clang
+            #- valgrind
 
 install:
+    - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+    - if [ "$CXX" = "g++" ]; then CXXFLAGS="-std=c++11 -stdlib=libc++"; fi
+    - if [ "$CXX" = "clang++" ]; then export CXX="clang"; fi
+    - if [ "$CXX" = "clang++" ]; then CXXFLAGS="-std=c++11 -stdlib=libc++"; fi
     - mkdir build
     - cd build
     - cmake ..
