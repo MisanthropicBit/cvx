@@ -4,8 +4,8 @@
 # Note that Microsoft Visual C++ compiler enables C++11 by default
 
 if (NOT (${CMAKE_VERSION} LESS 3.1))
-   set(CMAKE_CXX_STANDARD 11)
-elseif (NOT (${CMAKE_VERSION} LESS 3.0))
+    set(CMAKE_CXX_STANDARD 11)
+else()
     include(CheckCXXCompilerFlag)
 
     check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -18,4 +18,4 @@ elseif (NOT (${CMAKE_VERSION} LESS 3.0))
     else()
         message(ERROR "The compiler ${CMAKE_CXX_COMPILER} does not support C++11 support.")
     endif()
-endif()
+#endif()
