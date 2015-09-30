@@ -18,8 +18,10 @@ addons:
             - g++-4.8
             - clang
 
-install:
+before_install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+
+install:
     - mkdir build
     - cd build
     - cmake ..
