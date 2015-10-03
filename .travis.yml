@@ -17,10 +17,10 @@ addons:
         packages:
             - g++-4.9
             - clang
-            - valgrind
 
 before_install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9"; fi
+    - sudo apt-get -qq install valgrind
 
 install:
     - mkdir build
@@ -31,6 +31,8 @@ install:
 script:
     - cmake --version
     - valgrind --version
+
+after_success:
     - make test
     - tests/valgrind_tests.sh
 
