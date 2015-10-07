@@ -1,7 +1,8 @@
 #!/bin/bash
 
-for filename in *; do
-    if test -f "$filename" then
-        valgrind --leak-check=full --error-exitcode=1
+for filename in bin/*; do
+    if [ -f "$filename" -a -x "$filename" ]; then
+        echo "$filename"
+        #valgrind --leak-check=full --error-exitcode=1 ./"$filename"
     fi
 done

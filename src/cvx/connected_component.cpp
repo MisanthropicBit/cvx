@@ -66,15 +66,15 @@ namespace cvx {
             rectangle2i bb = bounding_box();
 
             if (bb.width == -1 && bb.height == -1) {
-               throw exception("Need to extract at least bounding box to infer point set");
+                throw exception("Need to extract at least bounding box to infer point set");
             }
 
             for (std::size_t y = bb.y; y < bb.bottom(); ++y) {
-               for (std::size_t x = bb.x; x < bb.right(); ++x) {
-                   //if (view(y, x) == _label) {
-                   //    _points.emplace_back(x, y);
-                   //}
-               }
+                for (std::size_t x = bb.x; x < bb.right(); ++x) {
+                    //if (view(y, x) == _label) {
+                    //    _points.emplace_back(x, y);
+                    //}
+                }
             }
         }
 

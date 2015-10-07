@@ -355,10 +355,6 @@ namespace cvx {
             make_extractors_from_flags(flags,
                                        std::back_inserter(extractors));
 
-            for (auto& ex : extractors) {
-                ex->initialise();
-            }
-
             using T = iterator_value_type<RandomAccessIterator>;
             union_find<T> labels;
 
@@ -372,7 +368,19 @@ namespace cvx {
             // 2. Compress all labels so they point to their root
             labels.flatten();
             
-            std::vector<connected_component> components(labels.label_count());
+            std::vector<connected_component> components;
+            components.reserve(labels.label_count());
+
+            // Set labels
+            for (size_t i = 0; i < labels.label_count(); ++i) {
+                components.emplace_back(i + 1);
+            }
+
+            for (auto& ex : extractors) {
+                for (auto& cc : components) {
+                    ex->initialise(cc);
+                }
+            }
 
             // 3. Relabel all connected components with final labels
             relabel(view, labels, background, extractors, components);

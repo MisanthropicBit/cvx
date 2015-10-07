@@ -46,11 +46,8 @@ include(${PROJECT_SOURCE_DIR}/cmake/Functions.cmake)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-#if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-#    list(APPEND CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
-#elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#    # Travis currently uses gcc 4.6.3 which uses the c++0x flag
-#    list(APPEND CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
+#if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+#    list(APPEND CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 #endif()
 
 add_definitions(${CMAKE_CXX_FLAGS})

@@ -144,7 +144,7 @@ namespace cvx {
                 static_assert(std::is_floating_point<Precision>::value,
                               "Precision must be a floating point type");
 
-                if (_centroid.x == -1.f && _centroid.y == -1.f) {
+                if (_centroid.x == static_cast<Precision>(-1.0) && _centroid.y == static_cast<Precision>(-1.0)) {
                     if (points().empty()) {
                         throw exception("Need at least point set to compute centroid");
                     }

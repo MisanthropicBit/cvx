@@ -40,11 +40,11 @@ int main() {
 
         assert(ccs == 5);
         assert(components.size() == 5);
-        assert(components[0].size() == expected_areas[0]);
-        assert(components[1].size() == expected_areas[1]);
-        assert(components[2].size() == expected_areas[2]);
-        assert(components[3].size() == expected_areas[3]);
-        assert(components[4].size() == expected_areas[4]);
+
+        for (size_t i = 0; i < components.size(); ++i) {
+            assert(components[i].label() == i + 1);
+            assert(components[i].size() == expected_areas[i]);
+        }
     } catch (cvx::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
         return 1;

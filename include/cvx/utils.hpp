@@ -114,6 +114,10 @@ namespace cvx {
 
             if (any_flags(flags & feature_flag::centroid)) {
                 *out++ = extractors[1];
+
+                if (!any_flags(flags & feature_flag::area)) {
+                    *out++ = extractors[0];
+                }
             }
 
             if (any_flags(flags & feature_flag::points)) {
@@ -122,6 +126,20 @@ namespace cvx {
 
             if (any_flags(flags & feature_flag::bounding_box)) {
                 *out++ = extractors[3];
+            }
+
+            if (any_flags(flags & feature_flag::extent)) {
+                // The extent is computed as the ratio between the bounding box
+                // and the size of the connected component
+
+                // Do not add the any extractors twice
+                if (!any_flags(flags & feature_flag::points)) {
+                    *out++ = extractors[2];
+                }
+
+                if (!any_flags(flags & feature_flag::bounding_box)) {
+                    *out++ = extractors[3];
+                }
             }
         }
     } // detail

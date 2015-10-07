@@ -3,15 +3,15 @@
 
 namespace cvx {
     namespace detail {
-        void area_extractor::initialise() {
+        void area_extractor::initialise(connected_component& component) {
         }
 
-        void area_extractor::update(std::size_t x, std::size_t y, connected_component& cc) {
-            //++cc.area();
-            ++cc._area;
+        void area_extractor::update(std::size_t x, std::size_t y, connected_component& component) {
+            //++component.area();
+            ++component._area;
         }
 
-        void area_extractor::finalise(connected_component& cc) {
+        void area_extractor::finalise(connected_component& component) {
         }
     }
 }
