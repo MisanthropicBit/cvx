@@ -20,9 +20,13 @@ At the moment, ``cvx`` supports 4- and 8-connectedness and can currently extract
 
 ``cvx`` will support the following features in the future:
 
-* Convex hulls
+* Convex hulls (including their areas and additional properties)
 * Outer contours
 * Inner contours
+* Ellipses
+* Circularity
+
+any hopefully many more...
 
 ### Building ``cvx``
 
