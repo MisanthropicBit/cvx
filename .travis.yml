@@ -32,7 +32,7 @@ script:
 
 after_success:
     - make test
-    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then ../tests/bin/valgrind_tests.sh; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then ../tests/valgrind_tests.sh; fi
 
 notifications:
     on_success: change
