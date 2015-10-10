@@ -375,7 +375,6 @@ namespace cvx {
         ///                       components, e.g. a std::vector<>
         /// \param width          Width of the image data
         /// \param height         Height of the image data
-        /// \param pitch          Pitch of the image data
         /// \param connectivity   Neighbourhood connectivity (4 or 8)
         /// \param background     Value of background elements
         //////////////////////////////////////////////////////////////////////

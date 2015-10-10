@@ -45,10 +45,8 @@ namespace cvx {
                 : first(RandomAccessIterator()),
                   last(RandomAccessIterator()),
                   _width(0),
-                  _height(0),
-                  _pitch(0),
-                  _pitched_width(0),
-                  _padding(0) {}
+                  _height(0) {
+            }
 
             //////////////////////////////////////////////////////////////////////
             /// Create a view of some data
@@ -67,13 +65,7 @@ namespace cvx {
                 : first(first),
                   last(last),
                   _width(width),
-                  _height(height),
-                  _pitch(pitch),
-                  _pitched_width(pitch / sizeof(value_type)),
-                  _padding(_pitched_width - width) {
-                if (!detail::check_pitched_distance(first, last, pitch, height)) {
-                    throw exception("Iterator range does not match image dimensions");
-                }
+                  _height(height) {
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -184,7 +176,7 @@ namespace cvx {
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
             reference operator()(std::size_t y, std::size_t x) {
-                return *(first + _pitched_width * y + x);
+                return *(first + pitch() * y + x);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -217,7 +209,7 @@ namespace cvx {
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
             const reference operator()(std::size_t y, std::size_t x) const {
-                return *(first + pitched_width() * y + x);
+                return *(first + pitch() * y + x);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -231,7 +223,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitched_width();
+                return first + y * pitch();
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -245,7 +237,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitched_width();
+                return first + y * pitch();
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -266,21 +258,7 @@ namespace cvx {
             /// \return The stride or pitch of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
             std::size_t pitch() const noexcept {
-                return _pitch;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            std::size_t pitched_width() const noexcept {
-                return _pitched_width;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// \return The padding applied to the width to achieve the right
-            ///         stride or pitch
-            //////////////////////////////////////////////////////////////////////
-            std::size_t padding() const noexcept {
-                return _padding;
+                return _width * sizeof(value_type);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -314,15 +292,7 @@ namespace cvx {
             /// \return The total number of bytes spanned by the view
             //////////////////////////////////////////////////////////////////////
             std::size_t bytesize() const {
-                return _pitch * _height;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// \return The total number of elements in the view, including the
-            ///         pitch
-            //////////////////////////////////////////////////////////////////////
-            std::size_t pitchsize() const {
-                return _pitched_width * _height;
+                return pitch() * _height;
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -355,7 +325,7 @@ namespace cvx {
 
         private:
             RandomAccessIterator first, last;
-            std::size_t _width, _height, _pitch, _pitched_width, _padding;
+            std::size_t _width, _height;
     };
 } // cvx
 

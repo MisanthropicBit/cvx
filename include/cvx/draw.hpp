@@ -38,7 +38,6 @@ namespace cvx {
         /// \param last   Iterator to the end of the image data
         /// \param width  Width of the image data
         /// \param height Height of the image data
-        /// \param pitch  Pitch in bytes of the image data
         /// \param title  Title of the image when displayed
         //////////////////////////////////////////////////////////////////////
         template<typename RandomAccessIterator>
@@ -46,7 +45,6 @@ namespace cvx {
                                                      RandomAccessIterator last,
                                                      std::size_t width,
                                                      std::size_t height,
-                                                     std::size_t pitch,
                                                      const std::string& title = "");
 
         //////////////////////////////////////////////////////////////////////
@@ -60,7 +58,6 @@ namespace cvx {
         /// \param last                 Iterator to the end of the image data
         /// \param width                Width of the image data
         /// \param height               Height of the image data
-        /// \param pitch                Pitch in bytes of the image data
         /// \param first2               InputIterator to the beginning of
         ///                             connected components
         /// \param last2                InputIterator to the end of connected
@@ -73,7 +70,6 @@ namespace cvx {
                                                      RandomAccessIterator last,
                                                      std::size_t width,
                                                      std::size_t height,
-                                                     std::size_t pitch,
                                                      InputIterator first2,
                                                      InputIterator last2,
                                                      const feature_flag& flags = feature_flag::none,
@@ -87,7 +83,6 @@ namespace cvx {
                                                      RandomAccessIterator last,
                                                      std::size_t width,
                                                      std::size_t height,
-                                                     std::size_t pitch,
                                                      const std::string& title = "");
 
         template<typename RandomAccessIterator, typename InputIterator>
@@ -95,7 +90,6 @@ namespace cvx {
                                                      RandomAccessIterator last,
                                                      std::size_t width,
                                                      std::size_t height,
-                                                     std::size_t pitch,
                                                      InputIterator first2,
                                                      InputIterator last2,
                                                      const feature_flag& flags = feature_flag::none,
