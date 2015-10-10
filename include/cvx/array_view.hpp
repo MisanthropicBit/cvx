@@ -11,10 +11,10 @@
 
 namespace cvx {
     //////////////////////////////////////////////////////////////////////
-    /// Abstracts a (pitched/strided) 2D view of an arbitrary range of
-    /// values
+    /// Abstracts a 2D view of an arbitrary range of values
     ///
-    /// \param <T> Type of the iterator range that is viewed
+    /// \param <RandomAccessIterator> Type of the iterator range that is
+    ///                               being viewed
     //////////////////////////////////////////////////////////////////////
     template<typename RandomAccessIterator>
     class CVX_EXPORT array_view final {
@@ -55,13 +55,11 @@ namespace cvx {
             /// \param last   Iterator to the end of the data
             /// \param width  Width of the data
             /// \param height Height of the data
-            /// \param pitch  Pitch (in bytes) of the data
             //////////////////////////////////////////////////////////////////////
             array_view(RandomAccessIterator first,
                        RandomAccessIterator last,
                        std::size_t width,
-                       std::size_t height,
-                       std::size_t pitch)
+                       std::size_t height)
                 : first(first),
                   last(last),
                   _width(width),
@@ -261,10 +259,6 @@ namespace cvx {
                 return _width * sizeof(value_type);
             }
 
-            //////////////////////////////////////////////////////////////////////
-            /// \return The padding applied to the width to achieve the right
-            ///         stride or pitch
-            //////////////////////////////////////////////////////////////////////
             //array_view subview(const rectangle2i& bounds) {
             //    if (bounds.x < 0 || bounds.y < 0 || bounds.right() >= width || bounds.bottom() >= height) {
             //       throw std::out_of_range("Subview bounds out of range");

@@ -6,7 +6,6 @@
 int main() {
     const int width = 25;
     const int height = 9;
-    const int pitch = width * sizeof(int);
 
     int input[][25] = { {1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
                         {0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
@@ -37,7 +36,6 @@ int main() {
                                                    input_end,
                                                    width,
                                                    height,
-                                                   pitch,
                                                    4,
                                                    1,
                                                    0);
