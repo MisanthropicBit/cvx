@@ -7,7 +7,7 @@
 
 namespace cvx {
     //////////////////////////////////////////////////////////////////////
-    /// Label the connected components in some pitched, binary image data
+    /// Label the connected components in some binary image data
     /// given by the iterator range [first, last[
     ///
     /// \param RandomAccessIterator Iterator type providing random access
@@ -16,7 +16,6 @@ namespace cvx {
     /// \param last                 Iterator to the end of the image data
     /// \param width                Width of the image data
     /// \param height               Height of the image data
-    /// \param pitch                Pitch (in bytes) of the image data
     /// \param connectivity         Neighbourhood connectivity (4 or 8)
     /// \param foreground           Value of foreground elements
     /// \param background           Value of background elements
@@ -27,7 +26,6 @@ namespace cvx {
                                                       RandomAccessIterator last,
                                                       std::size_t width,
                                                       std::size_t height,
-                                                      std::size_t pitch,
                                                       unsigned char connectivity,
                                                       iterator_value_type<RandomAccessIterator> foreground,
                                                       iterator_value_type<RandomAccessIterator> background) {
@@ -35,14 +33,13 @@ namespace cvx {
                                                   last,
                                                   width,
                                                   height,
-                                                  pitch,
                                                   connectivity,
                                                   foreground,
                                                   background);
     }
 
     //////////////////////////////////////////////////////////////////////
-    /// Label the connected components in some pitched, binary image data
+    /// Label the connected components in some binary image data
     /// given by the iterator range [first, last[ and extract features
     ///
     /// \param RandomAccessIterator Iterator type providing random access
@@ -54,7 +51,6 @@ namespace cvx {
     ///                             components, e.g. a std::vector
     /// \param width                Width of the image data
     /// \param height               Height of the image data
-    /// \param pitch                Pitch (in bytes) of the image data
     /// \param connectivity         Neighbourhood connectivity (4 or 8)
     /// \param foreground           Value of foreground elements
     /// \param background           Value of background elements
@@ -69,7 +65,6 @@ namespace cvx {
                                                       OutputIterator out,
                                                       std::size_t width,
                                                       std::size_t height,
-                                                      std::size_t pitch,
                                                       unsigned char connectivity,
                                                       iterator_value_type<RandomAccessIterator> foreground,
                                                       iterator_value_type<RandomAccessIterator> background,
@@ -79,7 +74,6 @@ namespace cvx {
                                                   out,
                                                   width,
                                                   height,
-                                                  pitch,
                                                   connectivity,
                                                   foreground,
                                                   background,
