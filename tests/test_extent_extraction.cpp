@@ -67,6 +67,7 @@ int main() {
         assert(components.size() == 10);
 
         for (size_t i = 0; i < components.size(); ++i) {
+            assert(components[i].label() == i + 1);
             assert_approx_equals(components[i].extent<double>(), expected_extents[i], epsilon);
         }
     } catch (cvx::exception& ex) {

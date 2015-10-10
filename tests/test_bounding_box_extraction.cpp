@@ -46,10 +46,10 @@ int main() {
         assert(ccs == 4);
         assert(components.size() == 4);
 
-        assert(components[0].bounding_box() == expected_bounding_boxes[0]);
-        assert(components[1].bounding_box() == expected_bounding_boxes[1]);
-        assert(components[2].bounding_box() == expected_bounding_boxes[2]);
-        assert(components[3].bounding_box() == expected_bounding_boxes[3]);
+        for (size_t i = 0; i < components.size(); ++i) {
+            assert(components[i].label() == i + 1);
+            assert(components[i].bounding_box() == expected_bounding_boxes[i]);
+        }
     } catch (cvx::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
         return 1;

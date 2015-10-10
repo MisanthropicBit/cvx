@@ -115,6 +115,7 @@ if(CVX_STATIC_LIBRARY OR CVX_SHARED_LIBRARY)
         add_library(${CVX_FULL_NAME} SHARED ${CVX_SOURCES})
         set_target_properties(${CVX_FULL_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CVX_LIB_DIR})
         add_definitions(-DCVX_SHARED_LIBRARY)
+        add_definitions(-DCVX_BUILING_SHARED_LIBRARY)
     endif()
 
     if(CVX_WITH_OPENCV AND OpenCV_FOUND)

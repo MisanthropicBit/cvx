@@ -116,8 +116,9 @@ int main() {
         assert(components.size() == 9);
 
         for (unsigned int i = 0; i < ccs; ++i) {
+            assert(components[i].label() == i + 1);
+
             auto& points = components[i].points();
-            
             assert(!points.empty());
             assert(std::equal(points.cbegin(),
                               points.cend(),

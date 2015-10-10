@@ -54,6 +54,7 @@ int main() {
         assert(components.size() == 8);
 
         for (size_t i = 0; i < components.size(); ++i) {
+            assert(components[i].label() == i + 1);
             assert_approx_equals(components[i].centroid().x, expected_centroids[i].x, epsilon);
             assert_approx_equals(components[i].centroid().y, expected_centroids[i].y, epsilon);
         }
