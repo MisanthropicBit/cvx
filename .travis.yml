@@ -43,3 +43,4 @@ notifications:
 branches:
     only:
         - master
+        - fix_array_view_pitch

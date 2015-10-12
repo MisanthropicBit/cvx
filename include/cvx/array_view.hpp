@@ -77,7 +77,7 @@ namespace cvx {
             /// \return True if the view contains the given point
             //////////////////////////////////////////////////////////////////////
             bool contains(const point2i& point) const noexcept {
-                return (point.x < 0 || point.x >= width() || point.y < 0 || point.y >= height());
+                return (point.x >= 0 && point.x < width() && point.y >= 0 && point.y < height());
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -174,7 +174,18 @@ namespace cvx {
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
             reference operator()(std::size_t y, std::size_t x) {
-                return *(first + pitch() * y + x);
+                return *(first + width() * y + x);
+            }
+
+            //////////////////////////////////////////////////////////////////////
+            /// Treat the viewed data as a 2D array and access the data at (x, y)
+            ///
+            /// \param y Y-coordinate of data
+            /// \param x X-coordinate of data
+            /// \return The data at (x, y)
+            //////////////////////////////////////////////////////////////////////
+            const reference operator()(std::size_t y, std::size_t x) const {
+                return *(first + width() * y + x);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -200,17 +211,6 @@ namespace cvx {
             }
 
             //////////////////////////////////////////////////////////////////////
-            /// Treat the viewed data as a 2D array and access the data at (x, y)
-            ///
-            /// \param y Y-coordinate of data
-            /// \param x X-coordinate of data
-            /// \return The data at (x, y)
-            //////////////////////////////////////////////////////////////////////
-            const reference operator()(std::size_t y, std::size_t x) const {
-                return *(first + pitch() * y + x);
-            }
-
-            //////////////////////////////////////////////////////////////////////
             /// Return a pointer to the specified row
             ///
             /// \param y Row to query
@@ -221,7 +221,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitch();
+                return first + y * width();
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -235,7 +235,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitch();
+                return first + y * width();
             }
 
             //////////////////////////////////////////////////////////////////////

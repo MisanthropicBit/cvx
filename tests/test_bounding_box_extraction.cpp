@@ -4,7 +4,7 @@
 #include <type_traits>
 
 int main() {
-    const int width = 19;
+    const int width = 25;
     const int height = 11;
 
     // Notice that we operate on a smaller part of the array's full width
