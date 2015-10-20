@@ -2,6 +2,7 @@ bin/
 build/
 lib/
 benchmark/
+experimental/
 *.DS_STORE
 *.swp
 FindOpenCV2.cmake
