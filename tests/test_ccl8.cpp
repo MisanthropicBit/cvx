@@ -6,7 +6,6 @@
 int main() {
     const int width = 25;
     const int height = 9;
-    const int pitch = width * sizeof(int);
 
     int input[][25] = { {1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
                         {0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
@@ -37,13 +36,14 @@ int main() {
                                                    input_end,
                                                    width,
                                                    height,
-                                                   pitch,
                                                    8,
                                                    1,
                                                    0);
 
         assert(ccs == 9);
-        assert(std::equal(input_begin, input_end, expected_begin));
+        assert(std::equal(input_begin,
+                          input_end,
+                          expected_begin));
     } catch (cvx::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
         return 1;

@@ -13,7 +13,7 @@
     #include <random>
 
     using hi_clock = std::chrono::high_resolution_clock;
-    using ms       = std::chrono::milliseconds;
+    using ms = std::chrono::milliseconds;
 
     int main() {
         try {
@@ -43,7 +43,6 @@
                                                        last,
                                                        mat.cols,
                                                        mat.rows,
-                                                       mat.step,
                                                        8,
                                                        0,
                                                        255);
@@ -59,7 +58,6 @@
                                               last,
                                               mat.cols,
                                               mat.rows,
-                                              mat.step,
                                               "Labelled image");
             cvx::wait_for_key();
         } catch (cv::Exception& ex) {

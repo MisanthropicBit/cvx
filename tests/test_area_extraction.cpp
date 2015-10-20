@@ -7,7 +7,6 @@
 int main() {
     const int width = 12;
     const int height = 9;
-    const int pitch = width * sizeof(short);
 
     short array[][12] = { {1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
                           {1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
@@ -32,7 +31,6 @@ int main() {
                                                    std::back_inserter(components),
                                                    width,
                                                    height,
-                                                   pitch,
                                                    8,
                                                    1,
                                                    0,

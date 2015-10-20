@@ -4,9 +4,8 @@
 #include <type_traits>
 
 int main() {
-    const int width = 19;
+    const int width = 25;
     const int height = 11;
-    const int pitch = 25 * sizeof(int);
 
     // Notice that we operate on a smaller part of the array's full width
     int array[][25] = { {0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -37,7 +36,6 @@ int main() {
                                                    std::back_inserter(components),
                                                    width,
                                                    height,
-                                                   pitch,
                                                    4,
                                                    2,
                                                    0,

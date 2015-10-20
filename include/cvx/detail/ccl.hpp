@@ -462,7 +462,6 @@ namespace cvx {
         ///                           target
         /// \param width              Width of the image data
         /// \param height             Height of the image data
-        /// \param pitch              Pitch of the image data
         /// \param connectivity       Neighbourhood connectivity (4 or 8)
         /// \param pred               Unary predicate that identifies a
         ///                           background element
@@ -473,7 +472,6 @@ namespace cvx {
                                                RandomAccessIterator last,
                                                std::size_t width,
                                                std::size_t height,
-                                               std::size_t pitch,
                                                unsigned char connectivity,
                                                iterator_value_type<RandomAccessIterator> foreground,
                                                iterator_value_type<RandomAccessIterator> background) {
@@ -482,8 +480,7 @@ namespace cvx {
             array_view<RandomAccessIterator> view(first,
                                                   last,
                                                   width,
-                                                  height,
-                                                  pitch);
+                                                  height);
 
             return two_pass_label(view, connectivity, background);
         }
@@ -501,7 +498,6 @@ namespace cvx {
         ///                           components, e.g. a std::vector<>
         /// \param width              Width of the image data
         /// \param height             Height of the image data
-        /// \param pitch              Pitch of the image data
         /// \param connectivity       Neighbourhood connectivity (4 or 8)
         /// \param foreground         Value of foreground elements
         /// \param background         Value of background elements
@@ -516,7 +512,6 @@ namespace cvx {
                                                OutputIterator out,
                                                std::size_t width,
                                                std::size_t height,
-                                               std::size_t pitch,
                                                unsigned char connectivity,
                                                iterator_value_type<RandomAccessIterator> foreground,
                                                iterator_value_type<RandomAccessIterator> background,
@@ -532,8 +527,7 @@ namespace cvx {
                 array_view<RandomAccessIterator> view(first,
                                                       last,
                                                       width,
-                                                      height,
-                                                      pitch);
+                                                      height);
 
                 return label_connected_components_view(view,
                                                        out,
@@ -549,7 +543,6 @@ namespace cvx {
                                               last,
                                               width,
                                               height,
-                                              pitch,
                                               connectivity,
                                               foreground,
                                               background);

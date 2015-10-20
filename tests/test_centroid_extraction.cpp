@@ -11,7 +11,6 @@ void assert_approx_equals(float a, float b, float epsilon) {
 int main() {
     const int width = 18;
     const int height = 9;
-    const int pitch = width * sizeof(short);
 
     short array[][18] = { {1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
                           {0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0},
@@ -44,7 +43,6 @@ int main() {
                                                    std::back_inserter(components),
                                                    width,
                                                    height,
-                                                   pitch,
                                                    8,
                                                    1,
                                                    0,

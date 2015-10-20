@@ -30,7 +30,6 @@ namespace cvx {
     /// \param last                 Iterator to the end of the image data
     /// \param width                Width of the image data
     /// \param height               Height of the image data
-    /// \param pitch                Pitch or stride of the image data
     /// \param out                  Destination iterator (may be the same
     ///                             as the input iterator)
     /// \param pred                 Unary predicate that identifies
@@ -43,7 +42,6 @@ namespace cvx {
     //                          RandomAccessIterator last,
     //                          std::size_t width,
     //                          std::size_t height,
-    //                          std::size_t pitch,
     //                          OutputIterator out,
     //                          typename std::iterator_traits<RandomAccessIterator>::value_type background,
     //                          UnaryPredicate pred) {
@@ -55,7 +53,6 @@ namespace cvx {
     //                                         last,
     //                                         width,
     //                                         height,
-    //                                         pitch);
 
     //   for (auto it = view.begin(); it != view.cend(); ++it, ++out) {
     //       if (pred(*it)) {
@@ -67,26 +64,6 @@ namespace cvx {
     namespace detail {
         template<typename Iterator>
         using diff_type = typename std::iterator_traits<Iterator>::difference_type;
-
-        //////////////////////////////////////////////////////////////////////
-        /// Check that the distance covered by an iterator range corresponds
-        /// to the given image dimensions
-        ///
-        /// \param RandomAccessIterator Any random access iterator
-        /// \param width                Width of the image data
-        /// \param height               Height of the image data
-        /// \param pitch                Pitch or stride of the image data
-        /// \return True if the distances match, false otherwise
-        //////////////////////////////////////////////////////////////////////
-        template<typename RandomAccessIterator>
-        bool check_pitched_distance(RandomAccessIterator first,
-                                    RandomAccessIterator last,
-                                    diff_type<RandomAccessIterator> pitch,
-                                    diff_type<RandomAccessIterator> height) {
-            using value_type = typename std::iterator_traits<RandomAccessIterator>::value_type;
-
-            return (std::distance(first, last) == static_cast<diff_type<RandomAccessIterator>>(height * pitch / sizeof(value_type)));
-        }
 
         template<typename OutputIterator>
         void make_extractors_from_flags(const feature_flag& flags,

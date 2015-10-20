@@ -7,7 +7,6 @@
 int main() {
     const int width = 10;
     const int height = 20;
-    const int pitch = width * sizeof(char);
 
     // Notice the use of a char. If there were more unique components than 1 << sizeof(char) - 1,
     // which is usually 255, the algorithm would mislabel some components because the label count
@@ -106,7 +105,6 @@ int main() {
                                                    std::back_inserter(components),
                                                    width,
                                                    height,
-                                                   pitch,
                                                    4,
                                                    0,
                                                    1,

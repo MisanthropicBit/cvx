@@ -11,10 +11,10 @@
 
 namespace cvx {
     //////////////////////////////////////////////////////////////////////
-    /// Abstracts a (pitched/strided) 2D view of an arbitrary range of
-    /// values
+    /// Abstracts a 2D view of an arbitrary range of values
     ///
-    /// \param <T> Type of the iterator range that is viewed
+    /// \param <RandomAccessIterator> Type of the iterator range that is
+    ///                               being viewed
     //////////////////////////////////////////////////////////////////////
     template<typename RandomAccessIterator>
     class CVX_EXPORT array_view final {
@@ -45,10 +45,8 @@ namespace cvx {
                 : first(RandomAccessIterator()),
                   last(RandomAccessIterator()),
                   _width(0),
-                  _height(0),
-                  _pitch(0),
-                  _pitched_width(0),
-                  _padding(0) {}
+                  _height(0) {
+            }
 
             //////////////////////////////////////////////////////////////////////
             /// Create a view of some data
@@ -57,23 +55,15 @@ namespace cvx {
             /// \param last   Iterator to the end of the data
             /// \param width  Width of the data
             /// \param height Height of the data
-            /// \param pitch  Pitch (in bytes) of the data
             //////////////////////////////////////////////////////////////////////
             array_view(RandomAccessIterator first,
                        RandomAccessIterator last,
                        std::size_t width,
-                       std::size_t height,
-                       std::size_t pitch)
+                       std::size_t height)
                 : first(first),
                   last(last),
                   _width(width),
-                  _height(height),
-                  _pitch(pitch),
-                  _pitched_width(pitch / sizeof(value_type)),
-                  _padding(_pitched_width - width) {
-                if (!detail::check_pitched_distance(first, last, pitch, height)) {
-                    throw exception("Iterator range does not match image dimensions");
-                }
+                  _height(height) {
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -87,7 +77,7 @@ namespace cvx {
             /// \return True if the view contains the given point
             //////////////////////////////////////////////////////////////////////
             bool contains(const point2i& point) const noexcept {
-                return (point.x < 0 || point.x >= width() || point.y < 0 || point.y >= height());
+                return (point.x >= 0 && point.x < width() && point.y >= 0 && point.y < height());
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -184,7 +174,18 @@ namespace cvx {
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
             reference operator()(std::size_t y, std::size_t x) {
-                return *(first + _pitched_width * y + x);
+                return *(first + width() * y + x);
+            }
+
+            //////////////////////////////////////////////////////////////////////
+            /// Treat the viewed data as a 2D array and access the data at (x, y)
+            ///
+            /// \param y Y-coordinate of data
+            /// \param x X-coordinate of data
+            /// \return The data at (x, y)
+            //////////////////////////////////////////////////////////////////////
+            const reference operator()(std::size_t y, std::size_t x) const {
+                return *(first + width() * y + x);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -210,17 +211,6 @@ namespace cvx {
             }
 
             //////////////////////////////////////////////////////////////////////
-            /// Treat the viewed data as a 2D array and access the data at (x, y)
-            ///
-            /// \param y Y-coordinate of data
-            /// \param x X-coordinate of data
-            /// \return The data at (x, y)
-            //////////////////////////////////////////////////////////////////////
-            const reference operator()(std::size_t y, std::size_t x) const {
-                return *(first + pitched_width() * y + x);
-            }
-
-            //////////////////////////////////////////////////////////////////////
             /// Return a pointer to the specified row
             ///
             /// \param y Row to query
@@ -231,7 +221,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitched_width();
+                return first + y * width();
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -245,7 +235,7 @@ namespace cvx {
                     throw exception("Y-coordinate out of bounds");
                 }
 
-                return first + y * pitched_width();
+                return first + y * width();
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -266,27 +256,9 @@ namespace cvx {
             /// \return The stride or pitch of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
             std::size_t pitch() const noexcept {
-                return _pitch;
+                return _width * sizeof(value_type);
             }
 
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            std::size_t pitched_width() const noexcept {
-                return _pitched_width;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// \return The padding applied to the width to achieve the right
-            ///         stride or pitch
-            //////////////////////////////////////////////////////////////////////
-            std::size_t padding() const noexcept {
-                return _padding;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// \return The padding applied to the width to achieve the right
-            ///         stride or pitch
-            //////////////////////////////////////////////////////////////////////
             //array_view subview(const rectangle2i& bounds) {
             //    if (bounds.x < 0 || bounds.y < 0 || bounds.right() >= width || bounds.bottom() >= height) {
             //       throw std::out_of_range("Subview bounds out of range");
@@ -314,15 +286,7 @@ namespace cvx {
             /// \return The total number of bytes spanned by the view
             //////////////////////////////////////////////////////////////////////
             std::size_t bytesize() const {
-                return _pitch * _height;
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// \return The total number of elements in the view, including the
-            ///         pitch
-            //////////////////////////////////////////////////////////////////////
-            std::size_t pitchsize() const {
-                return _pitched_width * _height;
+                return pitch() * _height;
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -355,7 +319,7 @@ namespace cvx {
 
         private:
             RandomAccessIterator first, last;
-            std::size_t _width, _height, _pitch, _pitched_width, _padding;
+            std::size_t _width, _height;
     };
 } // cvx
 
