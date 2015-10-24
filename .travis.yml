@@ -43,4 +43,4 @@ notifications:
 branches:
     only:
         - master
-        - fix_array_view_pitch
+        - ccl_roi
