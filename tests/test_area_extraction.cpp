@@ -25,7 +25,7 @@ int main() {
     int expected_areas[] = { 4, 5, 9, 4, 3 };
 
     try {
-        // Label the array with 4-connectivity and background elements as zero
+        // Label the array with 8-connectivity and background elements as zero
         auto ccs = cvx::label_connected_components(first,
                                                    last,
                                                    std::back_inserter(components),
