@@ -47,5 +47,9 @@ cmake <options> ..
 * **``CVX_SHARED_LIBRARY``**: Build ``cvx`` as a shared library (default)
 * **``CVX_BUILD_EXAMPLES``**: Build all examples
 * **``CVX_BUILD_TESTS``**   : Build all tests
-* **``CVX_GEN_DOCS``**      : Build all documentation locally
+* **``CVX_GEN_DOCS``**      : Build local documentation
 * **``CVX_WITH_OPENCV``**   : Also build examples that require OpenCV, and add display support to ``cvx``
+
+### Running the tests
+
+After successully building ``cvx`` with the ``CVX_BUILD_TESTS`` flag, run ``make test`` in the ``build`` directory.
