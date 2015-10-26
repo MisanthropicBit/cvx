@@ -7,7 +7,12 @@
 #include "cvx/rectangle2.hpp"
 #include "cvx/utils.hpp"
 #include <iterator>
+#include <stdexcept>
 #include <type_traits>
+
+#ifdef CVX_WITH_OPENCV
+    #include <opencv2/opencv.hpp>
+#endif
 
 namespace cvx {
     //////////////////////////////////////////////////////////////////////
@@ -42,10 +47,10 @@ namespace cvx {
             /// Create an empty view
             //////////////////////////////////////////////////////////////////////
             array_view()
-                : first(RandomAccessIterator()),
-                  last(RandomAccessIterator()),
-                  _width(0),
-                  _height(0) {
+                : array_view(RandomAccessIterator(),
+                             RandomAccessIterator(),
+                             0,
+                             0) {
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -65,6 +70,101 @@ namespace cvx {
                   _width(width),
                   _height(height) {
             }
+
+            //////////////////////////////////////////////////////////////////////
+            /// Create a subview of some data
+            ///
+            /// \param first  Iterator to the beginning of the data
+            /// \param last   Iterator to the end of the data
+            /// \param width  Width of the data
+            /// \param height Height of the data
+            /// \param roi    Rectangle defining the subview or region of interest
+            //////////////////////////////////////////////////////////////////////
+            array_view(RandomAccessIterator first,
+                       RandomAccessIterator last,
+                       std::size_t width,
+                       std::size_t height,
+                       const rectangle2i& roi)
+                : first(first + roi.x + roi.y * width),
+                  last(last + roi.right() + roi.y * width),
+                  _width(roi.width),
+                  _height(roi.height) {
+            }
+
+            //////////////////////////////////////////////////////////////////////
+            /// Create a subview of another array view
+            ///
+            /// \param view Iterator to the beginning of the data
+            /// \param roi  Rectangle defining the subview or region of interest
+            //////////////////////////////////////////////////////////////////////
+            array_view(const array_view<RandomAccessIterator>& view,
+                       const rectangle2i& roi)
+                : _width(roi.width),
+                  _height(roi.height) {
+                first = view.first + roi.x + roi.y * view.width();
+                last = view.first + roi.right() + roi.y * view.width();
+
+                check_bounds();
+            }
+
+            #ifdef CVX_WITH_OPENCV
+                //////////////////////////////////////////////////////////////////////
+                /// Create a view of an OpenCV Mat(rix)
+                ///
+                /// \param mat An OpenCV matrix
+                //////////////////////////////////////////////////////////////////////
+                array_view(const cv::Mat& mat)
+                    : array_view(mat.begin(),
+                                 mat.end(),
+                                 mat.width,
+                                 mat.height) {
+                }
+
+                //////////////////////////////////////////////////////////////////////
+                /// Create a subview of an OpenCV Mat(rix)
+                ///
+                /// \param mat    An OpenCV matrix
+                /// \param bounds Bounds specifying the subview
+                //////////////////////////////////////////////////////////////////////
+                array_view(const cv::Mat& mat,
+                           const rectangle2i& bounds)
+                    : array_view(mat.begin(),
+                                 mat.end(),
+                                 mat.width,
+                                 mat.height,
+                                 bounds) {
+                }
+
+                //////////////////////////////////////////////////////////////////////
+                /// Create a view of an OpenCV templated Mat(rix)
+                ///
+                /// \param view Iterator to the beginning of the data
+                /// \param roi  Rectangle defining the subview or region of interest
+                //////////////////////////////////////////////////////////////////////
+                template<typename T>
+                array_view(const cv::Mat_<T>& mat)
+                    : array_view(mat.begin(),
+                                 mat.end(),
+                                 mat.width,
+                                 mat.height) {
+                }
+
+                //////////////////////////////////////////////////////////////////////
+                /// Create a subview of an OpenCV templated Mat(rix)
+                ///
+                /// \param mat    An OpenCV matrix
+                /// \param bounds Bounds specifying the subview
+                //////////////////////////////////////////////////////////////////////
+                template<typename T>
+                array_view(const cv::Mat_<T>& mat,
+                           const rectangle2i& bounds)
+                    : array_view(mat.begin(),
+                                 mat.end(),
+                                 mat.width,
+                                 mat.height,
+                                 bounds) {
+                }
+            #endif
 
             //////////////////////////////////////////////////////////////////////
             /// \return True if the view is pointing to valid data
@@ -259,34 +359,43 @@ namespace cvx {
                 return _width * sizeof(value_type);
             }
 
-            //array_view subview(const rectangle2i& bounds) {
-            //    if (bounds.x < 0 || bounds.y < 0 || bounds.right() >= width || bounds.bottom() >= height) {
-            //       throw std::out_of_range("Subview bounds out of range");
-            //    }
+            //////////////////////////////////////////////////////////////////////
+            /// Create a subview from this view
+            ///
+            /// \param bounds The bounds specifying the subview
+            /// \return The subview of this view
+            //////////////////////////////////////////////////////////////////////
+            array_view<RandomAccessIterator> subview(const rectangle2i& bounds) {
+                if (!this->bounds().contains(bounds)) {
+                    throw std::out_of_range("Subview bounds out of range");
+                }
 
-            //    RandomAccessIterator iter = first + bounds.x + stride * bounds.y;
-
-            //    return array_view(iter,
-            //                     iter + bounds.area(), // Include padding
-            //                     bounds.width,
-            //                     bounds.height,
-            //                     ?);
-
-            //   return array_view<RandomAccessIterator>();
-            //}
+                return array_view<RandomAccessIterator>(*this,
+                                                        bounds);
+            }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of elements in the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t size() const {
+            std::size_t size() const noexcept {
                 return _width * _height;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of bytes spanned by the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t bytesize() const {
+            std::size_t bytesize() const noexcept {
                 return pitch() * _height;
+            }
+            
+            //////////////////////////////////////////////////////////////////////
+            /// The (x, y) coordinate of the rectangle specifies an offset if this
+            /// view is a subview of a parent view
+            ///
+            /// \return The bounds spanned by the view.
+            //////////////////////////////////////////////////////////////////////
+            rectangle2i bounds() const {
+                return rectangle2i(0, 0, width(), height());
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -315,6 +424,15 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             const_iterator cend() const noexcept {
                 return last;
+            }
+
+        private:
+            void check_bounds() {
+                difference_type dist = last - first;
+
+                if (dist >= size()) {
+                    throw exception("Iterator range out of bounds in array view");
+                }
             }
 
         private:
