@@ -60,6 +60,19 @@ namespace cvx {
             }
 
             //////////////////////////////////////////////////////////////////////
+            /// Create a rectangle from another rectangle of another type
+            ///
+            /// \param rect The other rectangle to base this one on
+            //////////////////////////////////////////////////////////////////////
+            template<typename U>
+            rectangle2(const rectangle2<U>& rectangle) {
+                x = static_cast<U>(rectangle.x);
+                y = static_cast<U>(rectangle.y);
+                width = static_cast<U>(rectangle.width);
+                height = static_cast<U>(rectangle.height);
+            }
+
+            //////////////////////////////////////////////////////////////////////
             /// Checks if a point is contained within this rectangle
             ///
             /// \param x x-coordinate of a point
@@ -105,8 +118,9 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             /// \return The aspect ratio (width / height) of the rectangle
             //////////////////////////////////////////////////////////////////////
+            template<typename Precision = float>
             float aspect_ratio() const {
-                return width / height;
+                return static_cast<Precision>(width) / static_cast<Precision>(height);
             }
 
             //////////////////////////////////////////////////////////////////////
