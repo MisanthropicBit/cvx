@@ -34,8 +34,10 @@ namespace cvx {
             //       complexity of the code, but removes a lot of unnessary
             //       boundary checks.
             //////////////////////////////////////////////////////////////////////
+            RandomAccessIterator row = view.row(0);
+
             // Examine the first element separately
-            U& e = view(0, 0);
+            U& e = *row++;
 
             if (e == background) {
                 e = 0;
@@ -45,15 +47,15 @@ namespace cvx {
             }
 
             // Scan the first line separately to avoid bounds checks in the remaining lines
-            for (std::size_t x = 1; x < view.width(); ++x) {
-                U& e = view(0, x);
+            for (std::size_t x = 1; x < view.width(); ++x, ++row) {
+                U& e = *row;
 
                 if (e == background) {
                     e = 0;
                 } else {
-                    U d = view(0, x - 1);
+                    U d = *(row - 1);
 
-                    if (d) {
+                    if (d != background) {
                         e = d;
                     } else {
                         e = label_count;
@@ -65,14 +67,14 @@ namespace cvx {
             // Scan the rest of the lines
             for (std::size_t y = 1; y < view.height(); ++y) {
                 // Check the left-most element of each row manually to reduce total boundary checks
-                U& e = view(y, 0);
+                U& e = *row;
 
                 if (e == background) {
                     e = 0;
                 } else {
-                    U b = view(y - 1, 0);
+                    U b = *(row - view.width());
 
-                    if (b) {
+                    if (b != background) {
                         e = b;
                     } else {
                         e = label_count;
@@ -80,26 +82,28 @@ namespace cvx {
                     }
                 }
 
-                for (std::size_t x = 1; x < view.width(); ++x) {
-                    U& e = view(y, x);
+                ++row;
+
+                for (std::size_t x = 1; x < view.width(); ++x, ++row) {
+                    U& e = *row;
 
                     if (e == background) {
                         e = 0;
                     } else {
-                        U b = view(y - 1, x);
+                        U b = *(row - view.width());
 
-                        if (b) {
-                            U d = view(y, x - 1);
+                        if (b != background) {
+                            U d = *(row - 1);
 
-                            if (d) {
+                            if (d != background) {
                                 e = labels.merge(b, d);
                             } else {
                                 e = b;
                             }
                         } else {
-                            U d = view(y, x - 1);
+                            U d = *(row - 1);
 
-                            if (d) {
+                            if (d != background) {
                                 e = d;
                             } else {
                                 e = label_count;
