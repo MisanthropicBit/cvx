@@ -216,7 +216,7 @@ namespace cvx {
             /// \param y Row to query
             /// \return The yth row
             //////////////////////////////////////////////////////////////////////
-            pointer row(std::size_t y) {
+            pointer row(size_type y) {
                 if (y >= height()) {
                     throw exception("Y-coordinate out of bounds");
                 }
@@ -230,7 +230,7 @@ namespace cvx {
             /// \param y Row to query
             /// \return The yth row
             //////////////////////////////////////////////////////////////////////
-            const pointer row(std::size_t y) const {
+            const pointer row(size_type y) const {
                 if (y >= height()) {
                     throw exception("Y-coordinate out of bounds");
                 }

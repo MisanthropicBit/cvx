@@ -34,7 +34,7 @@ namespace cvx {
             //       complexity of the code, but removes a lot of unnessary
             //       boundary checks.
             //////////////////////////////////////////////////////////////////////
-            RandomAccessIterator row = view.row(0);
+            RandomAccessIterator row = view.begin();
 
             // Examine the first element separately
             U& e = *row++;

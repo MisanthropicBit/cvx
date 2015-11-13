@@ -1,5 +1,3 @@
-# http://stackoverflow.com/questions/22111549/travis-ci-with-clang-3-4-and-c11
-
 language: cpp
 
 compiler:
@@ -22,10 +20,20 @@ addons:
 before_install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9"; fi
 
-install:
+    # Build OpenCV
+    - git clone https://github.com/Itseez/opencv.git
+    - cd opencv
     - mkdir build
     - cd build
     - cmake ..
+    - make -j8
+    - sudo make -j8 install
+    - cd ../..
+
+install:
+    - mkdir build
+    - cd build
+    - cmake -DCVX_BUILD_EXAMPLES=On -DCVX_BUILD_TESTS=On -DCVX_STATIC_LIBRARY=On -DCVX_SHARED_LIBRARY=On ..
     - make
 
 script:

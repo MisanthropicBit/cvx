@@ -18,6 +18,7 @@ namespace cvx {
 #include "cvx/ccl.hpp"
 #include "cvx/color.hpp"
 #include "cvx/connected_component.hpp"
+#include "cvx/draw.hpp"
 //#include "cvx/ellispe.hpp"
 #include "cvx/exception.hpp"
 #include "cvx/feature_flag.hpp"
