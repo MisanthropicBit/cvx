@@ -13,6 +13,7 @@ addons:
         sources:
             - ubuntu-toolchain-r-test
         packages:
+            - g++-4.8
             - g++-4.9
             - clang
             - valgrind
@@ -25,9 +26,9 @@ before_install:
     - cd opencv
     - mkdir build
     - cd build
-    - cmake ..
-    - make -j8
-    - sudo make -j8 install
+    - cmake -DBUILD_EXAMPLES=Off -DBUILD_DOCS=Off -DBUILD_opencv_java=Off -DBUILD_TESTS=Off -DBUILD_PERF_TESTS=Off -DWITH_OPENXR=Off -DWITH_CUDA=Off ..
+    - make
+    - sudo make install
     - cd ../..
 
 install:
