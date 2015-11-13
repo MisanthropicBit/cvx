@@ -58,8 +58,8 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             array_view(RandomAccessIterator first,
                        RandomAccessIterator last,
-                       std::size_t width,
-                       std::size_t height)
+                       size_type width,
+                       size_type height)
                 : first(first),
                   last(last),
                   _width(width),
@@ -86,7 +86,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            reference operator[](std::size_t i) {
+            reference operator[](size_type i) {
                 size_type x = i % width();
                 size_type y = i / width();
 
@@ -99,7 +99,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            const reference operator[](std::size_t i) const {
+            const reference operator[](size_type i) const {
                 size_type x = i % width();
                 size_type y = i / width();
 
@@ -113,7 +113,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            reference at(std::size_t i) {
+            reference at(size_type i) {
                 if (i >= size()) {
                     throw exception("Index out of bounds");
                 }
@@ -128,7 +128,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            const reference at(std::size_t i) const {
+            const reference at(size_type i) const {
                 if (i >= size()) {
                     throw exception("Index out of bounds");
                 }
@@ -143,7 +143,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            reference at(std::size_t x, std::size_t y) {
+            reference at(size_type x, size_type y) {
                 if (x >= width()) {
                     throw exception("X-coordinate out of bounds");
                 }
@@ -158,7 +158,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            const reference at(std::size_t y, std::size_t x) const {
+            const reference at(size_type y, size_type x) const {
                 if (x >= width()) {
                     throw exception("X-coordinate out of bounds");
                 }
@@ -173,7 +173,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            reference operator()(std::size_t y, std::size_t x) {
+            reference operator()(size_type y, size_type x) {
                 return *(first + width() * y + x);
             }
 
@@ -184,7 +184,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            const reference operator()(std::size_t y, std::size_t x) const {
+            const reference operator()(size_type y, size_type x) const {
                 return *(first + width() * y + x);
             }
 
@@ -241,21 +241,21 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             /// \return The width of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t width() const noexcept {
+            size_type width() const noexcept {
                 return _width;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The height of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t height() const noexcept {
+            size_type height() const noexcept {
                 return _height;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The stride or pitch of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t pitch() const noexcept {
+            size_type pitch() const noexcept {
                 return _width * sizeof(value_type);
             }
 
@@ -278,14 +278,14 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of elements in the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t size() const {
+            size_type size() const {
                 return _width * _height;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of bytes spanned by the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t bytesize() const {
+            size_type bytesize() const {
                 return pitch() * _height;
             }
 
@@ -319,7 +319,7 @@ namespace cvx {
 
         private:
             RandomAccessIterator first, last;
-            std::size_t _width, _height;
+            size_type _width, _height;
     };
 } // cvx
 
