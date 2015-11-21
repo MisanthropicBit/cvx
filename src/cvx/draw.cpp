@@ -1,6 +1,7 @@
 #include "cvx/draw.hpp"
 #include "cvx/exception.hpp"
 #include <cstdint>
+#include <iostream>
 #include <random>
 
 namespace cvx {
@@ -23,7 +24,8 @@ namespace cvx {
         }
     #else
         void wait_for_key() {
-            throw exception("Cannot draw, OpenCV is not available");
+            // Not necessarily portable
+            std::cin.get();
         }
     #endif // CVX_WITH_OPENCV
 } // cvx

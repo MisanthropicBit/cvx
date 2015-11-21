@@ -141,13 +141,11 @@ namespace cvx {
                                           RandomAccessIterator last,
                                           std::size_t width,
                                           std::size_t height,
-                                          std::size_t pitch,
                                           const std::string& title) {
             array_view<RandomAccessIterator> view(first,
                                                   last,
                                                   width,
-                                                  height,
-                                                  pitch);
+                                                  height);
 
             cv::Mat label_image(view.height(),
                                 view.width(),
@@ -189,7 +187,6 @@ namespace cvx {
                                           RandomAccessIterator last,
                                           std::size_t width,
                                           std::size_t height,
-                                          std::size_t pitch,
                                           InputIterator first2,
                                           InputIterator last2,
                                           const feature_flag& flags,
@@ -218,8 +215,7 @@ namespace cvx {
             array_view<RandomAccessIterator> view(first,
                                                   last,
                                                   width,
-                                                  height,
-                                                  pitch);
+                                                  height);
 
             cv::Mat label_image(view.height(),
                                 view.width(),
@@ -273,7 +269,6 @@ namespace cvx {
                                           RandomAccessIterator last,
                                           std::size_t width,
                                           std::size_t height,
-                                          std::size_t pitch,
                                           const std::string& title) {
             throw exception("Cannot draw, OpenCV is not available");
         }
@@ -283,7 +278,6 @@ namespace cvx {
                                           RandomAccessIterator last,
                                           std::size_t width,
                                           std::size_t height,
-                                          std::size_t pitch,
                                           InputIterator first2,
                                           InputIterator last2,
                                           const feature_flag& flags,
