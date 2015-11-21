@@ -6,6 +6,7 @@
 #include "cvx/point2.hpp"
 #include "cvx/rectangle2.hpp"
 #include "cvx/utils.hpp"
+#include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <type_traits>
@@ -25,7 +26,7 @@ namespace cvx {
     class CVX_EXPORT array_view final {
 
         #if defined(CVX_WITH_OPENCV) && !defined(OPENCV_NOSTL)
-            // Note: We check this before the typedefs to avoid excess errors
+            // We check this before the typedefs to avoid excess errors
             // Note: Update for contiguous_iterators when available
             static_assert(std::is_same<typename std::iterator_traits<RandomAccessIterator>::iterator_category,
                                        std::random_access_iterator_tag>::value,
@@ -63,12 +64,29 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             array_view(RandomAccessIterator first,
                        RandomAccessIterator last,
-                       std::size_t width,
-                       std::size_t height)
-                : first(first),
-                  last(last),
-                  _width(width),
-                  _height(height) {
+                       size_type width,
+                       size_type height)
+                : array_view(first,
+                             last,
+                             width,
+                             height,
+                             rectangle2<size_type>(0, 0, width, height)) {
+            }
+
+            //////////////////////////////////////////////////////////////////////
+            /// Create a subview of another array view
+            ///
+            /// \param view Iterator to the beginning of the data
+            /// \param roi  Rectangle defining the subview or region of interest
+            //////////////////////////////////////////////////////////////////////
+            template<typename U>
+            array_view(const array_view<RandomAccessIterator>& view,
+                       const rectangle2<U>& roi)
+                : array_view(view.first,
+                             view.last,
+                             view.width(),
+                             view.height(),
+                             roi) {
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -80,30 +98,15 @@ namespace cvx {
             /// \param height Height of the data
             /// \param roi    Rectangle defining the subview or region of interest
             //////////////////////////////////////////////////////////////////////
+            template<typename U>
             array_view(RandomAccessIterator first,
                        RandomAccessIterator last,
-                       std::size_t width,
-                       std::size_t height,
-                       const rectangle2i& roi)
+                       size_type width,
+                       size_type height,
+                       const rectangle2<U>& roi)
                 : first(first + roi.x + roi.y * width),
-                  last(last + roi.right() + roi.y * width),
-                  _width(roi.width),
-                  _height(roi.height) {
-            }
-
-            //////////////////////////////////////////////////////////////////////
-            /// Create a subview of another array view
-            ///
-            /// \param view Iterator to the beginning of the data
-            /// \param roi  Rectangle defining the subview or region of interest
-            //////////////////////////////////////////////////////////////////////
-            array_view(const array_view<RandomAccessIterator>& view,
-                       const rectangle2i& roi)
-                : _width(roi.width),
-                  _height(roi.height) {
-                first = view.first + roi.x + roi.y * view.width();
-                last = view.first + roi.right() + roi.y * view.width();
-
+                  last(last + roi.right() + roi.bottom() * width),
+                  _bounds(roi) {
                 check_bounds();
             }
 
@@ -127,12 +130,12 @@ namespace cvx {
                 /// \param bounds Bounds specifying the subview
                 //////////////////////////////////////////////////////////////////////
                 array_view(const cv::Mat& mat,
-                           const rectangle2i& bounds)
+                           const rectangle2i& roi)
                     : array_view(mat.begin(),
                                  mat.end(),
                                  mat.width,
                                  mat.height,
-                                 bounds) {
+                                 roi) {
                 }
 
                 //////////////////////////////////////////////////////////////////////
@@ -164,7 +167,7 @@ namespace cvx {
                                  mat.height,
                                  bounds) {
                 }
-            #endif
+            #endif // CVX_WITH_OPENCV
 
             //////////////////////////////////////////////////////////////////////
             /// \return True if the view is pointing to valid data
@@ -174,10 +177,12 @@ namespace cvx {
             }
 
             //////////////////////////////////////////////////////////////////////
-            /// \return True if the view contains the given point
+            /// \return True if the view contains the given value
             //////////////////////////////////////////////////////////////////////
-            bool contains(const point2i& point) const noexcept {
-                return (point.x >= 0 && point.x < width() && point.y >= 0 && point.y < height());
+            bool contains(RandomAccessIterator value) const {
+                RandomAccessIterator end = cend();
+
+                return std::find(cbegin(), end, value) != end;
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -186,7 +191,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            reference operator[](std::size_t i) {
+            reference operator[](size_type i) {
                 size_type x = i % width();
                 size_type y = i / width();
 
@@ -199,11 +204,12 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            const reference operator[](std::size_t i) const {
-                size_type x = i % width();
-                size_type y = i / width();
+            const reference operator[](size_type i) const {
+                return operator[](i);
+                //size_type x = i % width();
+                //size_type y = i / width();
 
-                return operator()(y, x);
+                //return operator()(y, x);
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -213,7 +219,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            reference at(std::size_t i) {
+            reference at(size_type i) {
                 if (i >= size()) {
                     throw exception("Index out of bounds");
                 }
@@ -228,7 +234,7 @@ namespace cvx {
             /// \param i Index
             /// \return The data at i
             //////////////////////////////////////////////////////////////////////
-            const reference at(std::size_t i) const {
+            const reference at(size_type i) const {
                 if (i >= size()) {
                     throw exception("Index out of bounds");
                 }
@@ -243,7 +249,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            reference at(std::size_t x, std::size_t y) {
+            reference at(size_type x, size_type y) {
                 if (x >= width()) {
                     throw exception("X-coordinate out of bounds");
                 }
@@ -258,7 +264,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            const reference at(std::size_t y, std::size_t x) const {
+            const reference at(size_type y, size_type x) const {
                 if (x >= width()) {
                     throw exception("X-coordinate out of bounds");
                 }
@@ -273,7 +279,7 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            reference operator()(std::size_t y, std::size_t x) {
+            reference operator()(size_type y, size_type x) {
                 return *(first + width() * y + x);
             }
 
@@ -284,7 +290,8 @@ namespace cvx {
             /// \param x X-coordinate of data
             /// \return The data at (x, y)
             //////////////////////////////////////////////////////////////////////
-            const reference operator()(std::size_t y, std::size_t x) const {
+            const reference operator()(size_type y, size_type x) const {
+                return *(first + x + y * step());
                 return *(first + width() * y + x);
             }
 
@@ -316,7 +323,7 @@ namespace cvx {
             /// \param y Row to query
             /// \return The yth row
             //////////////////////////////////////////////////////////////////////
-            pointer row(std::size_t y) {
+            pointer row(size_type y) {
                 if (y >= height()) {
                     throw exception("Y-coordinate out of bounds");
                 }
@@ -330,7 +337,7 @@ namespace cvx {
             /// \param y Row to query
             /// \return The yth row
             //////////////////////////////////////////////////////////////////////
-            const pointer row(std::size_t y) const {
+            const pointer row(size_type y) const {
                 if (y >= height()) {
                     throw exception("Y-coordinate out of bounds");
                 }
@@ -341,21 +348,21 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             /// \return The width of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t width() const noexcept {
+            size_type width() const noexcept {
                 return _width;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The height of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t height() const noexcept {
+            size_type height() const noexcept {
                 return _height;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The stride or pitch of the data viewed as a 2D array
             //////////////////////////////////////////////////////////////////////
-            std::size_t pitch() const noexcept {
+            size_type pitch() const noexcept {
                 return _width * sizeof(value_type);
             }
 
@@ -370,6 +377,10 @@ namespace cvx {
                     throw std::out_of_range("Subview bounds out of range");
                 }
 
+                if (bounds.area() == 0) {
+                    throw std::logic_error("Cannot create an empty subview");
+                }
+
                 return array_view<RandomAccessIterator>(*this,
                                                         bounds);
             }
@@ -377,14 +388,14 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of elements in the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t size() const noexcept {
+            size_type size() const noexcept {
                 return _width * _height;
             }
 
             //////////////////////////////////////////////////////////////////////
             /// \return The total number of bytes spanned by the view
             //////////////////////////////////////////////////////////////////////
-            std::size_t bytesize() const noexcept {
+            size_type bytesize() const noexcept {
                 return pitch() * _height;
             }
             
@@ -396,6 +407,13 @@ namespace cvx {
             //////////////////////////////////////////////////////////////////////
             rectangle2i bounds() const {
                 return rectangle2i(0, 0, width(), height());
+            }
+
+            //////////////////////////////////////////////////////////////////////
+            /// \return True if this is a subview of another view, false otherwise
+            //////////////////////////////////////////////////////////////////////
+            bool is_subview() const {
+                return (_step < width());
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -427,6 +445,10 @@ namespace cvx {
             }
 
         private:
+            inline size_type step() const noexcept {
+                return _step;
+            }
+
             void check_bounds() {
                 difference_type dist = last - first;
 
@@ -437,7 +459,8 @@ namespace cvx {
 
         private:
             RandomAccessIterator first, last;
-            std::size_t _width, _height;
+            size_type _width, _height, _step;
+            rectangle2<size_type> _bounds;
     };
 } // cvx
 
