@@ -135,7 +135,7 @@ namespace cvx {
                 temp_point.x = point.x + trace_directions[direction][0];
                 temp_point.y = point.y + trace_directions[direction][1];
 
-                if (view.contains(temp_point)) {
+                if (view.contains_point(temp_point)) {
                     if (view(temp_point) == background) {
                         direction = ++direction % 8;
                     } else {
