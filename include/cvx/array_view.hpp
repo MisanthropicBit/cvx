@@ -136,8 +136,8 @@ namespace cvx {
                 /// \param mat An OpenCV matrix
                 //////////////////////////////////////////////////////////////////////
                 array_view(const cv::Mat& mat)
-                    : array_view(mat.begin<RandomAccessIterator>(),
-                                 mat.end<RandomAccessIterator>(),
+                    : array_view(mat.begin<value_type>(),
+                                 mat.end<value_type>(),
                                  mat.cols,
                                  mat.rows) {
                 }
@@ -150,8 +150,8 @@ namespace cvx {
                 //////////////////////////////////////////////////////////////////////
                 array_view(const cv::Mat& mat,
                            const rectangle2<size_type>& roi)
-                    : array_view(mat.begin<RandomAccessIterator>(),
-                                 mat.end<RandomAccessIterator>(),
+                    : array_view(mat.begin<value_type>(),
+                                 mat.end<value_type>(),
                                  mat.cols,
                                  mat.rows,
                                  roi) {

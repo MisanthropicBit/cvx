@@ -55,6 +55,12 @@ int main() {
         assert(short_view.end() == &short_array[7][12]);
         assert(short_view.end() == std::end(short_array[7]));
 
+        for (size_t y = 0; y < short_view.height(); ++y) {
+            for (size_t x = 0; x < short_view.width(); ++x) {
+                assert(short_view.at(y, x) == short_array[y][x]);
+            }
+        }
+
         cvx::array_view<int*> int_view(&int_array[0][0],
                                        &int_array[14][6],
                                        6,
@@ -79,6 +85,12 @@ int main() {
         assert(int_view.begin() == std::begin(int_array[0]));
         assert(int_view.end() == &int_array[14][6]);
         assert(int_view.end() == std::end(int_array[14]));
+
+        for (size_t y = 0; y < int_view.height(); ++y) {
+            for (size_t x = 0; x < int_view.width(); ++x) {
+                assert(int_view.at(y, x) == int_array[y][x]);
+            }
+        }
 
         // Test subviews. With the given bounds, this is the resulting
         // view of int_view:
@@ -125,17 +137,29 @@ int main() {
 
         #ifdef CVX_WITH_OPENCV
             // Test views of OpenCV matrices
-            //cv::Mat int_mat(30, 30, CV_32S);
-            //cvx::array_view<int*> opencv_view(int_mat);
+            cv::Mat int_mat(30, 30, CV_32S);
+            cvx::array_view<cv::MatConstIterator_<int>> opencv_view(int_mat);
 
-            //assert(!opencv_view.is_subview());
-            //assert(opencv_view.valid());
-            //assert(opencv_view.contains_point(cvx::point2i(15, 21)));
-            //assert(int_mat.cols == opencv_view.width());
-            //assert(int_mat.rows == opencv_view.height());
-            //assert(opencv_view.size() == 30 * 30);
-            //assert(opencv_view.bytesize() == 30 * 30 * sizeof(int));
-            //assert(opencv_view.pitch() == 30 * sizeof(int));
+            assert(!opencv_view.is_subview());
+            assert(opencv_view.valid());
+            assert(opencv_view.contains_point(cvx::point2i(15, 21)));
+            //assert(opencv_view[35] == );
+            //assert(opencv_view.at(888) == );
+            //assert(opencv_view.at(12, 9) == );
+            //assert(opencv_view(28, 0) == );
+            //assert(opencv_view(cvx::point2<long>(0, 10)) == );
+            //assert(opencv_view.row(10) == int_array[10]);
+            assert(int_mat.cols == opencv_view.width());
+            assert(int_mat.rows == opencv_view.height());
+            assert(opencv_view.size() == 30 * 30);
+            assert(opencv_view.bytesize() == 30 * 30 * sizeof(int));
+            assert(opencv_view.pitch() == 30 * sizeof(int));
+
+            //for (int y = 0; y < opencv_view.height(); ++y) {
+            //    for (int x = 0; x < opencv_view.width(); ++x) {
+            //        assert(opencv_view.at(y, x) == int_mat.at<int>(y, x));
+            //    }
+            //}
         #endif // CVX_WITH_OPENCV
     } catch (const cvx::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
